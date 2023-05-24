@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyBullet : Bullet
 {
+    new public float speed;
     protected override void Update()
     {
         rb.velocity = transform.forward * speed;
@@ -13,10 +14,6 @@ public class EnemyBullet : Bullet
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
-        {
-            Destroy(this.gameObject);
-        }
-        else
         {
             Destroy(this.gameObject);
         }

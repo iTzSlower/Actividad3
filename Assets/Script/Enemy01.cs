@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class Enemy01 : MonoBehaviour
 {
+    public state a;
     public float timer;
     public float speed = 5;
+    public GameObject bullet;
     public float speedShoot = 3;
     GameObject player;
     Rigidbody rb;
-    state a;
     float timerS;
     int repeatShoot = 0;
-    enum state
+    public enum state
     {
         walk,shoot
     }
@@ -25,7 +26,7 @@ public class Enemy01 : MonoBehaviour
     void Update()
     {
         transform.LookAt(player.transform.position);
-        timer += Time.time;
+        timer += Time.deltaTime;
         switch (a)
         {
             case state.walk:
@@ -43,13 +44,14 @@ public class Enemy01 : MonoBehaviour
 
         if(timer > 2)
         {
+            timer = 0;
             a = state.shoot;
             repeatShoot += 1;
-            timer = 0;
         }
     }
     void shoot()
     {
+        rb.velocity = Vector3.zero;
         timerS += Time.deltaTime;
         if(timerS > (speedShoot/ repeatShoot))
         {
@@ -59,12 +61,15 @@ public class Enemy01 : MonoBehaviour
 
         if (timer > 3)
         {
-            a = state.walk;
             timer = 0;
+            a = state.walk;
         }
     }
     void Shooting()
     {
-
+        GameObject a = Instantiate(bullet);
+        a.transform.position = transform.position + (transform.forward * 1.5f);
+        a.transform.rotation = transform.rotation;
+        a.GetComponent<EnemyBullet>().speed += (0.5f * repeatShoot);
     }
 }
